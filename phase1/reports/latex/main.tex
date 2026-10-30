@@ -1,0 +1,133 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=2.25cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx,booktabs,amsmath,amssymb,xcolor,array,tabularx,float}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\definecolor{navy}{HTML}{12314A}
+\definecolor{teal}{HTML}{176B87}
+\definecolor{softblue}{HTML}{EDF5F8}
+\definecolor{softgreen}{HTML}{EFF7F0}
+\definecolor{softpeach}{HTML}{FFF3E9}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=teal,citecolor=teal,
+  pdftitle={Applied Statistical Inference: Phase 1},pdfauthor={Mahdi Abazari Aghdam}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small Applied Statistical Inference}\fancyhead[R]{\small Phase 1 Portfolio}\fancyfoot[C]{\thepage}
+\setlength{\headheight}{15pt}
+\setlength{\parskip}{5pt}\setlength{\parindent}{0pt}
+\newcommand{\sectionpage}[2]{\clearpage\pagecolor{#1}\section{#2}}
+\newcommand{\fig}[3]{\begin{figure}[H]\centering\includegraphics[width=#2\linewidth]{../figures/#1.png}\caption{#3}\label{fig:#1}\end{figure}}
+\newcommand{\pval}[1]{\ensuremath{#1}}
+\input{values.tex}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{0.6cm}
+\includegraphics[width=2.8cm]{assets/sharif_logo.png}\\[0.8cm]
+{\color{navy}\rule{\linewidth}{1.7pt}}\\[0.9cm]
+{\Huge\bfseries Applied Statistical Inference}\\[0.4cm]
+{\LARGE Phase 1: A Five-Case Portfolio}\\[1.0cm]
+{\large Sleep and Lifestyle \(\cdot\) Acceptance Sampling \(\cdot\) Normal Theory\\
+Test Preparation \(\cdot\) Multivariate Performance}\\[0.9cm]
+{\color{navy}\rule{\linewidth}{1.7pt}}\\[1.3cm]
+{\Large Sharif University of Technology}\\[0.3cm]
+{\large Department of Industrial Engineering}\\[0.2cm]
+{\large Engineering Statistics}\\[1.3cm]
+{\small AUTHOR}\\[0.2cm]
+{\Large\bfseries Mahdi Abazari Aghdam}\\[0.8cm]
+{\large October 2026}
+\end{center}
+\clearpage
+\pagecolor{softblue}
+\section*{Abstract}
+This report presents five reproducible inference case studies using two supplied tabular datasets and two mathematical scenarios. In the synthetic sleep sample (\SleepN{} records), activity and daily steps are strongly associated, while a small men-only subgroup limits one proposed comparison. For the original acceptance rule, the probability of rejecting a batch at 5\% defects is \RejectFive. Simulated normal heights give $P(175<X<195)=\HeightProbability$; Box--Cox produces only a marginal in-sample Q--Q improvement. Students who completed test preparation have a higher mean math score by about 5.62 points, although this comparison is observational. A three-subject standardized index differs by gender, and reading and writing are strongly correlated ($r=\PearsonR$). Every reported numerical result is generated from the same fixed-seed Python analysis. The datasets support methodological demonstration, not causal or clinical generalization.
+\tableofcontents
+\clearpage\nopagecolor
+\section{Introduction}
+Applied inference requires matching a statistical method to an estimand and then stating what the data can support. This project combines five assignments from the original Phase 1 brief \cite{assignment}: lifestyle data, acceptance sampling, normal simulation, test preparation, and an academic-performance index. The 374-row sleep file is described as synthetic in the project brief; the 1,000-row student file is also associated with a generated-exam-data source \cite{sleepdata,studentdata}. Both are used as supplied. Their descriptive and inferential results are demonstrations of methods rather than population-level claims.
+
+\section{Methods and reproducibility}
+The pipeline reads the two CSV files without altering them, checks required fields, fixes a local NumPy random generator at seed 403109076, and exports 14 figures at 300 dpi. Shapiro--Wilk tests and Q--Q plots diagnose distribution shape; median-centered Levene tests diagnose variance differences. Ordinal stress uses Mann--Whitney U with rank-biserial effect size. Questions about means use Welch tests, which avoid assuming equal group variances. For large groups, mean inference is less sensitive to nonnormal individual scores; the four-person subgroup remains fragile. Independent within-group percentile bootstrap intervals use 3,000 resamples. Four sleep hypotheses are adjusted together using Holm's step-down method. A 95\% interval is interpreted as a repeated-sampling procedure, not a 95\% probability that a fixed parameter lies inside the observed interval. No observational comparison is interpreted causally.
+
+\sectionpage{softgreen}{Case 1: Sleep, activity, and stress}
+\subsection{Research question and exploratory patterns}
+The supplied sample has \SleepN{} records, including 219 with no disorder label, 77 with insomnia, and 78 with sleep apnea. Figure~\ref{fig:01_stress_disorder} shows separation of stress distributions across disorder labels; Figure~\ref{fig:02_sleep_steps} shows structured clusters of sleep duration and step counts. Figure~\ref{fig:03_stress_gender} shows the gender contrast, and Figure~\ref{fig:04_activity_steps} makes the prespecified activity cutoffs visible. Repeated profiles and the stated synthetic provenance limit the scope of inference.
+\fig{01_stress_disorder}{0.73}{Stress distributions by sleep-disorder label in the supplied synthetic data.}
+\fig{02_sleep_steps}{0.73}{Sleep duration and daily steps, colored by stress level.}
+\fig{03_stress_gender}{0.73}{Stress levels by gender in the supplied synthetic data.}
+\fig{04_activity_steps}{0.73}{Activity and steps, with 40 and 60 minutes/day cutoffs marked.}
+\subsection{Formal hypothesis tests}
+For gender, $H_0$ asserts equal stress distributions and $H_1$ asserts a difference. Because stress is ordinal, Mann--Whitney U is the primary test. For activity, $H_0:\mu_{\ge60}\le\mu_{<40}$ versus $H_1:\mu_{\ge60}>\mu_{<40}$; \ExcludedN{} middle-activity records are excluded. For sleep duration, $H_0:\mu_{\mathrm{none}}=\mu_{\mathrm{any\ disorder}}$ versus unequal means; insomnia and apnea are pooled before testing. For the men-only claim, $H_0:\mu_{stress=3}\le\mu_{stress\ge7}$ versus a greater mean in the low-stress group.
+
+\begin{table}[H]\centering\small
+\caption{Four pre-specified comparisons. Intervals are 95\% bootstrap intervals for A minus B; gender stress targets medians, while the other intervals target means.}
+\begin{tabularx}{\linewidth}{@{}p{3.7cm}p{4.4cm}X@{}}\toprule
+Comparison and group sizes & Test statistic, raw and Holm $p$ & Effect size; 95\% interval\\\midrule
+Female vs male stress ($n=\GenderStressNA/\GenderStressNB$) & $U=\GenderStressStatistic$; $p=\GenderStressP$; Holm $=\GenderStressHolmP$ & $r_{rb}=\GenderStressEffect$; \GenderStressCI\\[3pt]
+High vs low activity: steps ($n=\ActivityStepsNA/\ActivityStepsNB$) & $t=\ActivityStepsStatistic$; $p=\ActivityStepsP$; Holm $=\ActivityStepsHolmP$ & $d=\ActivityStepsEffect$; \ActivityStepsCI\\[3pt]
+No vs any disorder: hours ($n=\SleepDisorderNA/\SleepDisorderNB$) & $t=\SleepDisorderStatistic$; $p=\SleepDisorderP$; Holm $=\SleepDisorderHolmP$ & $d=\SleepDisorderEffect$; \SleepDisorderCI\\[3pt]
+Men low vs high stress: activity ($n=\MaleStressNA/\MaleStressNB$) & $t=\MaleStressStatistic$; $p=\MaleStressP$; Holm $=\MaleStressHolmP$ & $d=\MaleStressEffect$; \MaleStressCI\\\bottomrule
+\end{tabularx}\label{tab:sleep}\end{table}
+
+Shapiro $p$ values for the two groups were, respectively: gender stress \GenderStressShapiroA{} and \GenderStressShapiroB; activity steps \ActivityStepsShapiroA{} and \ActivityStepsShapiroB; sleep hours \SleepDisorderShapiroA{} and \SleepDisorderShapiroB; men-only activity \MaleStressShapiroA{} and \MaleStressShapiroB. Median-centered Levene $p$ values were \GenderStressLevene, \ActivityStepsLevene, \SleepDisorderLevene, and \MaleStressLevene. The ordinal stress test avoids a normal-scale assumption. The larger mean comparisons use Welch with degrees of freedom \ActivityStepsDF{} and \SleepDisorderDF. The men's low-stress group contains only \MaleStressNA{} records (Welch df \MaleStressDF); its one-sided $p=\MaleStressP$ and bootstrap interval can appear discordant because both approximations are unstable for such a small, discrete group. This result is inconclusive after Holm adjustment. These are associations within a synthetic file, not evidence of biological or behavioral effects.
+
+\sectionpage{softpeach}{Case 2: Acceptance sampling}
+\subsection{Rule audit and OC curve}
+The original assignment says reject when the 60-item sample has at least four defectives \cite{assignment}. Thus accept when $D\le3$. A later English planning brief describes a conflicting rule; this report follows the original assignment. With the requested binomial approximation,
+\begin{equation}P(\text{accept}\mid p)=P(D\le3)=\sum_{k=0}^{3}\binom{60}{k}p^k(1-p)^{60-k},\quad D\sim\mathrm{Binomial}(60,p).\end{equation}
+\begin{table}[htbp]\centering\caption{OC values under the original acceptance rule.}\begin{tabular}{rrrrrrrr}\toprule
+$p$ & .01 & .02 & .03 & .05 & .10 & .15 & .20\\\midrule
+$P(\mathrm{accept})$ & .9969 & .9678 & .8943 & .6473 & .1374 & .0148 & .0010\\\bottomrule\end{tabular}\end{table}
+\fig{05_oc_curve}{0.85}{The plan rapidly reduces acceptance as the true defect rate increases; the 2\% and 5\% points are annotated.}
+At $p=.05$, $P(\mathrm{reject})=\RejectFive$. At $p=.02$, $P(\mathrm{accept})=\AcceptTwo$. These quantify the plan's trade-off; labeling either rate as a producer or consumer risk requires chosen acceptable and rejectable quality levels. For finite batches of 2,000 sampled without replacement, a hypergeometric model would be exact; the binomial model follows the assigned approximation.
+
+\sectionpage{softblue}{Case 3: Normal theory and transformations}
+\subsection{Probability and simulation}
+For $X\sim N(182,8^2)$ cm,
+\begin{equation}P(175<X<195)=\Phi\!\left(\frac{195-182}{8}\right)-\Phi\!\left(\frac{175-182}{8}\right)=\Phi(1.625)-\Phi(-0.875)=\HeightProbability.\end{equation}
+The fixed-seed sample of 1,200 heights has mean \HeightMean{} cm and sample SD \HeightSD{} cm. Figure~\ref{fig:06_height_histogram} overlays a fitted normal density.
+\fig{06_height_histogram}{0.8}{Simulated heights follow the assumed Gaussian data-generating process.}
+\subsection{Q--Q diagnostics}
+The Box--Cox estimate is $\hat\lambda=\BoxLambda$. Q--Q correlation-squared values for raw, log, and Box--Cox scales are \RawQQ, \LogQQ, and \BoxQQ; Shapiro $p$ values are \RawShapiro, \LogShapiro, and \BoxShapiro. The raw data already looks normal. Box--Cox is marginally straighter in this realization, but it selects $\lambda$ from the same data; the slight in-sample gain is not a reason to transform an already Gaussian process. Figure~\ref{fig:07_height_qq_comparison} shows all three scales together.
+\fig{07_height_qq_comparison}{1.0}{Raw, log, and Box--Cox Q--Q plots for the same 1,200 simulated heights.}
+
+\sectionpage{softgreen}{Case 4: Test preparation and math scores}
+\subsection{Question, diagnostics, and inference}
+The null is $H_0:\mu_{completed}=\mu_{none}$, with a two-sided alternative at $\alpha=.01$. The completed group has $n=\PrepNA$, mean \PrepMeanA, and SD \PrepSDA; the no-course group has $n=\PrepNB$, mean \PrepMeanB, and SD \PrepSDB. Levene $p=\PrepLevene$ does not indicate unequal variances here, but Welch remains a sound default for the mean contrast. The result is $t=\PrepT$, df $=\PrepDF$, $p=\PrepP$, Cohen $d=\PrepD$, with a bootstrap 95\% CI for the mean difference of \PrepCI{} score points.
+\fig{08_math_test_prep}{0.8}{Students completing test preparation have higher math scores on average in the supplied file.}
+\subsection{Prospective power and causal limits}
+Using the observed $d$, equal-sized future groups, a two-sided noncentral-$t$ model, $\alpha=.01$, and target power .85 gives \PrepRequiredN{} students per group. This is a planning calculation because the observed effect itself is uncertain.
+\fig{09_power_curve}{0.8}{Two-sided power curve at $\alpha=.01$, with the 85\% target and required per-group size marked.}
+Completion is associated with higher math scores, but students were not randomly assigned to preparation. Motivation, prior ability, and support can confound this result. The dataset source acknowledges generated exam data \cite{studentdata}; this is a method demonstration, not an estimated causal effect of an educational intervention.
+
+\sectionpage{softpeach}{Case 5: Composite index and correlation}
+\subsection{Index and group comparison}
+For student $i$ and subject $j\in\{m,r,w\}$, define $z_{ij}=(x_{ij}-\bar x_j)/s_j$ using the full sample and sample standard deviation, then $C_i=(z_{im}+z_{ir}+z_{iw})/3$. The null is equal female and male group means, versus a two-sided alternative. Female: $n=\IndexNA$, mean \IndexMeanA; male: $n=\IndexNB$, mean \IndexMeanB. Welch gives $t=\IndexT$, df $=\IndexDF$, $p=\IndexP$, $d=\IndexD$, and a 95\% bootstrap CI for the mean gap of \IndexCI. Large groups support mean inference despite one group failing Shapiro's normality diagnostic.
+\fig{10_composite_gender}{0.78}{The standardized three-subject index has a positive female-minus-male gap in this sample.}
+The female-minus-male raw-score gaps are \MathGap{} in math, +\ReadingGap{} in reading, and +\WritingGap{} in writing. The index gap is therefore driven by reading and writing rather than math.
+\subsection{Reading and writing}
+The scatter is approximately linear; Pearson $r=\PearsonR$ with 95\% Fisher-$z$ CI \PearsonCI{} and $p<10^{-300}$. Spearman $\rho=\SpearmanR$ provides a rank-based sensitivity check. The strong association suggests that reading and writing partly capture a common verbal-performance construct; equal weights in the index effectively give that construct two components. Alternative weights could change the group contrast.
+\fig{11_reading_writing}{0.8}{Reading and writing scores track closely; the line summarizes their linear association.}
+
+\sectionpage{softblue}{Cross-case discussion and conclusions}
+The five cases illustrate why an estimand must be defined before a test is selected: rank-based inference fits ordinal stress; Welch compares means without equal-variance assumptions; a binomial CDF answers the OC question; and Pearson describes an approximately linear relation. Diagnostic rejection of individual normality does not automatically invalidate large-sample inference for a mean. Conversely, $n=4$ makes a subgroup claim fragile even when a point estimate is large. Bootstrap intervals convey effect magnitude, while multiple-comparison adjustment limits false discoveries. The most consequential limitations are synthetic or generated data provenance, repeated profiles, observational selection, and the approximate binomial model for finite-lot sampling.
+
+\begin{itemize}
+\item The original OC decision rule leads to acceptance number three; the English planning brief's conflicting wording must not be used for computation.
+\item The sleep comparisons show several large file-level associations, but the men-only claim is inconclusive after Holm adjustment.
+\item A normal simulation can show small Q--Q differences across transforms without evidence that a transform is needed.
+\item Test-preparation completion and higher math scores are associated, with no causal identification.
+\item The composite index depends on its weighting; reading and writing are strongly redundant.
+\end{itemize}
+
+\section{Appendix: computational details}
+Welch's statistic is $(\bar X_A-\bar X_B)/\sqrt{s_A^2/n_A+s_B^2/n_B}$, with Satterthwaite degrees of freedom $\nu=(v_A+v_B)^2/[v_A^2/(n_A-1)+v_B^2/(n_B-1)]$, where $v_g=s_g^2/n_g$. Cohen's $d$ uses the pooled sample SD for scale, even though the test uses Welch standard error. Rank-biserial $r_{rb}=2U/(n_A n_B)-1$, with midranks for ties. Holm orders the four raw p-values and multiplies by the descending number of remaining tests, enforcing monotonicity. The two-sided power calculation evaluates the noncentral-$t$ tail areas with noncentrality $|d|\sqrt{n/2}$ and selects the first integer $n$ with power at least .85. Pearson's 95\% interval uses Fisher $z=\operatorname{atanh}(r)$ and standard error $1/\sqrt{n-3}$. Python dependencies and exact versions are in \texttt{requirements.txt}; the executed notebook and JSON contain the full output.
+
+\begin{thebibliography}{9}
+\bibitem{assignment} Sharif University of Technology, \emph{Engineering Statistics, Phase 1 Project}, Spring 1405 (source assignment supplied with the project).
+\bibitem{sleepdata} L. Tharmalingam, \emph{Sleep Health and Lifestyle Dataset}, Kaggle, \url{https://www.kaggle.com/datasets/uom190346a/sleep-health-and-lifestyle-dataset}.
+\bibitem{studentdata} J. Seshapanpu, \emph{Students Performance in Exams}, Kaggle, \url{https://www.kaggle.com/datasets/spscientist/students-performance-in-exams}.
+\bibitem{bootstrap} B. Efron and R. Tibshirani, \emph{An Introduction to the Bootstrap}, Chapman \& Hall/CRC, 1993.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,164 @@
+{
+  "seed": 403109076,
+  "alpha": 0.05,
+  "part_a": {
+    "descriptive": {
+      "n": 60,
+      "mean": 356.95000000000005,
+      "median": 237.4,
+      "sample_sd": 429.88327406638405,
+      "minimum": 6.8,
+      "maximum": 2468.6,
+      "cv": 1.2043235020769967
+    },
+    "theta_mom": 356.95,
+    "theta_mle": 356.95,
+    "theta_numeric_verify": {
+      "estimate": 356.95000000000005,
+      "optimizer_success": true,
+      "gradient_norm": 0.0
+    },
+    "theta_scipy_verify": 356.95000000000005,
+    "mc_bias_trials": 10000,
+    "mc_estimate_mean": 356.68327498781673,
+    "mc_bias": -0.26672501218325806,
+    "mc_variance": 2084.3622472668767,
+    "theoretical_variance": 2123.5550416666665,
+    "crlb": 2123.5550416666665,
+    "efficiency": 1.0188032547850938,
+    "consistency_trials_each": 3000,
+    "consistency": [
+      {
+        "n": 10,
+        "empirical_variance": 12771.634054306403,
+        "theoretical_variance": 12741.330249999999,
+        "empirical_bias": 0.06616759374958292
+      },
+      {
+        "n": 50,
+        "empirical_variance": 2503.2632037078492,
+        "theoretical_variance": 2548.2660499999997,
+        "empirical_bias": -0.4400143983464204
+      },
+      {
+        "n": 200,
+        "empirical_variance": 650.9055259870976,
+        "theoretical_variance": 637.0665124999999,
+        "empirical_bias": -0.03135330259641478
+      },
+      {
+        "n": 1000,
+        "empirical_variance": 124.36444200398634,
+        "theoretical_variance": 127.41330249999999,
+        "empirical_bias": 0.3219123395501242
+      },
+      {
+        "n": 5000,
+        "empirical_variance": 25.364526083259378,
+        "theoretical_variance": 25.482660499999998,
+        "empirical_bias": -0.035662865325662096
+      }
+    ],
+    "asymptotic_qq_r2": 0.9994747273644015,
+    "exact_ci": [
+      281.4112427394513,
+      467.75979278581025
+    ],
+    "bootstrap_ci": [
+      261.1692083333333,
+      476.9620416666667
+    ],
+    "exact_width": 186.34855004635892,
+    "bootstrap_width": 215.79283333333342,
+    "data_bootstrap_resamples": 5000,
+    "coverage": {
+      "trials": 2000,
+      "bootstrap_resamples_per_trial": 1000,
+      "exact_coverage": 0.951,
+      "bootstrap_coverage": 0.9375,
+      "exact_hits": 1902,
+      "bootstrap_hits": 1875
+    },
+    "reliability_500": 0.24641050643963666,
+    "reliability_bootstrap_ci": [
+      0.14742029096174308,
+      0.3505326408619336
+    ]
+  },
+  "part_b": {
+    "fit": {
+      "n": 40,
+      "a": 108.60233873741686,
+      "b": 0.7333171123545666,
+      "xbar": 349.675,
+      "ybar": 365.025,
+      "sxx": 545178.775,
+      "sxy": 399788.92500000005,
+      "syy": 313954.355,
+      "sse": 20782.294967663587,
+      "s2": 546.9024991490418,
+      "s": 23.38594661648405,
+      "r2": 0.933804724678326
+    },
+    "linregress_verify": {
+      "a": 108.60233873741691,
+      "b": 0.7333171123545665,
+      "r2": 0.9338047246783259
+    },
+    "gaussian_mle_numeric_verify": {
+      "a": 108.60233873741777,
+      "b": 0.7333171123545641,
+      "sigma2_mle": 519.557374191599,
+      "optimizer_success": true,
+      "gradient_norm": 7.181559586684001e-13
+    },
+    "inference": {
+      "df": 38,
+      "t_critical": 2.0243941639119694,
+      "se_a": 11.676119418334741,
+      "se_b": 0.031672728955043056,
+      "a_ci": [
+        84.96527072980079,
+        132.23940674503294
+      ],
+      "b_ci": [
+        0.6691990247028119,
+        0.7974352000063214
+      ],
+      "slope_t": 23.152950078771315,
+      "slope_p": 5.236122027201967e-24
+    },
+    "diagnostics": {
+      "shapiro_w": 0.9711460421270339,
+      "shapiro_p": 0.3909966919238253,
+      "bp_lm": 0.5460251615724188,
+      "bp_p": 0.45994637467431054,
+      "durbin_watson": 1.5933368200195082
+    },
+    "prediction_400": {
+      "x0": 400,
+      "mean_prediction": 401.9291836792435,
+      "leverage": 0.029645458959769663,
+      "mean_ci": [
+        393.7778415882033,
+        410.08052577028377
+      ],
+      "prediction_interval": [
+        353.89019181382395,
+        449.9681755446631
+      ]
+    },
+    "monte_carlo": {
+      "trials": 10000,
+      "intercept_bias": 0.14577529726000193,
+      "slope_bias": -0.0004342207571487178,
+      "intercept_variance_empirical": 134.97291237297222,
+      "intercept_variance_theoretical": 136.33176467121362,
+      "slope_variance_empirical": 0.0009944198773835428,
+      "slope_variance_theoretical": 0.0010031617594596226,
+      "slope_ci_coverage": 0.9525
+    },
+    "temperature_min": 172.0,
+    "temperature_max": 553.0
+  }
+}
